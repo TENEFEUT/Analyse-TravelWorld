@@ -1,0 +1,334 @@
+/* Container principal avec le gradient */
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.signup-card {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Carte principale blanche */
+.signup-box {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 2.5rem 2.5rem 1.5rem;
+}
+
+/* Header avec logo et titre */
+.signup-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo span {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #262626;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #8e8e8e;
+  font-weight: 400;
+  line-height: 1.4;
+  padding: 0 1rem;
+}
+
+/* Message d'erreur */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 1px;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.error-message p {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+/* Formulaire */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Inputs - dimensions fixes comme Instagram */
+.form-input {
+  width: 268px;
+  height: 38px;
+  padding: 0 8px;
+  background: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  color: #262626;
+  outline: none;
+  transition: border-color 0.2s;
+  margin: 0 auto;
+  display: block;
+}
+
+.form-input::placeholder {
+  color: #8e8e8e;
+}
+
+.form-input:focus {
+  border-color: #a8a8a8;
+  background: white;
+}
+
+.form-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Indicateur de force du mot de passe */
+.password-strength {
+  width: 268px;
+  margin: 0.5rem auto;
+}
+
+.strength-bars {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.bar {
+  flex: 1;
+  height: 2px;
+  background: #dbdbdb;
+  border-radius: 1px;
+  transition: background 0.3s;
+}
+
+.bar.active {
+  background: #22c55e;
+}
+
+.strength-text {
+  font-size: 0.75rem;
+  color: #8e8e8e;
+  text-align: center;
+  margin: 0;
+}
+
+/* Bouton de soumission */
+.submit-button {
+  width: 268px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0.75rem auto 0;
+  display: block;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Conditions d'utilisation */
+.terms {
+  margin-top: 1rem;
+  padding: 0 1rem;
+}
+
+.terms p {
+  font-size: 0.6875rem;
+  color: #8e8e8e;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+}
+
+.terms a {
+  color: #00376b;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+/* Carte de connexion */
+.login-box-link {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.login-box-link p {
+  color: #262626;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.login-box-link a {
+  color: #0095f6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-box-link a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.footer a {
+  color: white;
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-weight: 300;
+  transition: opacity 0.2s;
+}
+
+.footer a:hover {
+  opacity: 0.8;
+}
+
+/* Page de succès */
+.success-box {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background: #dcfce7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #16a34a;
+}
+
+.success-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 0.5rem;
+}
+
+.success-message {
+  font-size: 0.875rem;
+  color: #737373;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.success-message strong {
+  color: #262626;
+}
+
+.success-info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 1px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.success-info p {
+  font-size: 0.75rem;
+  color: #1e40af;
+  margin: 0;
+}
+
+.back-link {
+  color: #0095f6;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .signup-box {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .form-input,
+  .submit-button,
+  .password-strength {
+    width: 100%;
+    max-width: 268px;
+  }
+
+  .subtitle {
+    padding: 0;
+  }
+
+  .terms {
+    padding: 0;
+  }
+}

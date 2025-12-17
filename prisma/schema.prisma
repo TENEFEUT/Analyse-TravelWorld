@@ -1,0 +1,360 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== UTILISATEURS ====================
+model User {
+  id              String            @id @default(cuid())
+  email           String            @unique
+  name            String?
+  password        String
+
+  // Vérification email
+  emailVerified   Boolean  @default(false)
+  verificationToken String?
+  verificationTokenExpiry DateTime?
+  
+  // Informations personnelles
+  firstName       String?
+  lastName        String?
+  gender          Gender?
+  birthDate       DateTime?
+  birthPlace      String?
+  nationality     String?
+  currentCountry  String?
+  phone           String?
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  // Relations
+  profile         UserProfile?
+  cases           ImmigrationCase[]
+  documents       Document[]
+  analyses        FeasibilityAnalysis[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+// ==================== PROFIL UTILISATEUR ====================
+model UserProfile {
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String   @unique
+  
+  // Parcours académique
+  education       Education[]
+  
+  // Parcours professionnel
+  workExperience  WorkExperience[]
+  
+  // Situation familiale
+  maritalStatus   MaritalStatus?
+  numberOfChildren Int?
+  
+  // Compétences linguistiques
+  languages       LanguageSkill[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+// ==================== ÉDUCATION ====================
+model Education {
+  id              String      @id @default(cuid())
+  profile         UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String
+  
+  degree          String      // Licence, Master, Doctorat, etc.
+  fieldOfStudy    String      // Génie logiciel, Médecine, etc.
+  institution     String
+  country         String
+  startDate       DateTime
+  endDate         DateTime?
+  isCurrently     Boolean     @default(false)
+  
+  // Documents associés
+  documents       Document[]
+  
+  createdAt       DateTime    @default(now())
+}
+
+// ==================== EXPÉRIENCE PROFESSIONNELLE ====================
+model WorkExperience {
+  id              String      @id @default(cuid())
+  profile         UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String
+  
+  jobTitle        String
+  company         String
+  country         String
+  startDate       DateTime
+  endDate         DateTime?
+  isCurrently     Boolean     @default(false)
+  description     String?
+  
+  createdAt       DateTime    @default(now())
+}
+
+// ==================== COMPÉTENCES LINGUISTIQUES ====================
+model LanguageSkill {
+  id              String         @id @default(cuid())
+  profile         UserProfile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId       String
+  
+  language        Language
+  level           LanguageLevel
+  hasCertificate  Boolean        @default(false)
+  certificateName String?        // TOEFL, IELTS, DELF, etc.
+  score           String?
+  
+  createdAt       DateTime       @default(now())
+}
+
+enum Language {
+  FRENCH
+  ENGLISH
+  SPANISH
+  CHINESE
+  ARABIC
+  GERMAN
+  PORTUGUESE
+  OTHER
+}
+
+enum LanguageLevel {
+  A1
+  A2
+  B1
+  B2
+  C1
+  C2
+  NATIVE
+}
+
+// ==================== DOCUMENTS ====================
+model Document {
+  id              String      @id @default(cuid())
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  
+  type            DocumentType
+  name            String
+  description     String?
+  fileUrl         String
+  fileName        String
+  fileSize        Int
+  mimeType        String
+  
+  // Relations optionnelles
+  education       Education?   @relation(fields: [educationId], references: [id])
+  educationId     String?
+  
+  case            ImmigrationCase? @relation(fields: [caseId], references: [id])
+  caseId          String?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+enum DocumentType {
+  ID_CARD
+  PASSPORT
+  BIRTH_CERTIFICATE
+  DIPLOMA
+  TRANSCRIPT
+  WORK_CERTIFICATE
+  PROOF_OF_FUNDS
+  LANGUAGE_CERTIFICATE
+  MOTIVATION_LETTER
+  CV
+  PHOTOS
+  OTHER
+}
+
+// ==================== ANALYSE DE FAISABILITÉ ====================
+model FeasibilityAnalysis {
+  id              String      @id @default(cuid())
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  
+  status          AnalysisStatus @default(PENDING)
+  
+  // Résultats de l'analyse
+  recommendations CountryRecommendation[]
+  
+  // Notes de l'analyse
+  analysisNotes   String?
+  aiAnalysis      String?     // Résultat de l'IA
+  
+  createdAt       DateTime    @default(now())
+  completedAt     DateTime?
+}
+
+enum AnalysisStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ==================== RECOMMANDATIONS DE PAYS ====================
+model CountryRecommendation {
+  id              String              @id @default(cuid())
+  analysis        FeasibilityAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId      String
+  
+  country         String
+  visaType        VisaType
+  score           Int                 // Score de compatibilité sur 100
+  reasoning       String              // Raison de la recommandation
+  requirements    String[]            // Liste des exigences
+  estimatedDuration String?           // Durée estimée du processus
+  estimatedCost   String?             // Coût estimé
+  
+  createdAt       DateTime            @default(now())
+}
+
+enum VisaType {
+  STUDENT
+  WORK
+  TOURIST
+  BUSINESS
+  PERMANENT_RESIDENCE
+  FAMILY_REUNION
+  ASYLUM
+  REFUGEE
+}
+
+// ==================== DOSSIER D'IMMIGRATION ====================
+model ImmigrationCase {
+  id              String      @id @default(cuid())
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  
+  country         String
+  visaType        VisaType
+  status          CaseStatus  @default(PENDING)
+  description     String?
+  
+  // Étapes du dossier
+  steps           CaseStep[]
+  
+  // Documents du dossier
+  documents       Document[]
+  
+  // Dates importantes
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+}
+
+enum CaseStatus {
+  PENDING
+  IN_PROGRESS
+  DOCUMENTS_REVIEW
+  SUBMITTED
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// ==================== ÉTAPES DU DOSSIER ====================
+model CaseStep {
+  id              String          @id @default(cuid())
+  case            ImmigrationCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  caseId          String
+  
+  stepNumber      Int
+  title           String
+  description     String
+  status          StepStatus      @default(NOT_STARTED)
+  
+  // Validation
+  requiresProof   Boolean         @default(false)
+  proofType       ProofType?
+  proofUrl        String?         // URL de la preuve uploadée
+  proofNotes      String?
+  
+  // Dates
+  completedAt     DateTime?
+  validatedAt     DateTime?
+  
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@unique([caseId, stepNumber])
+}
+
+enum StepStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PENDING_VALIDATION
+  COMPLETED
+  BLOCKED
+}
+
+enum ProofType {
+  SCREENSHOT
+  CREDENTIALS
+  DOCUMENT
+  CERTIFICATE
+}
+
+// ==================== TEMPLATES DE PROCÉDURES ====================
+model ProcedureTemplate {
+  id              String      @id @default(cuid())
+  
+  country         String
+  visaType        VisaType
+  title           String
+  description     String
+  
+  // Étapes prédéfinies
+  steps           TemplateStep[]
+  
+  // Documents requis
+  requiredDocuments DocumentType[]
+  
+  estimatedDuration String
+  estimatedCost     String
+  
+  isActive        Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model TemplateStep {
+  id              String            @id @default(cuid())
+  template        ProcedureTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  templateId      String
+  
+  stepNumber      Int
+  title           String
+  description     String
+  instructions    String            // Instructions détaillées
+  
+  requiresProof   Boolean           @default(false)
+  proofType       ProofType?
+  
+  estimatedDays   Int?              // Nombre de jours estimés pour cette étape
+  
+  @@unique([templateId, stepNumber])
+}

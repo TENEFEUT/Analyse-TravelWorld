@@ -1,0 +1,243 @@
+/* Container principal avec le gradient */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Carte principale blanche */
+.login-box {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 2.5rem 2.5rem 1.5rem;
+}
+
+/* Header avec logo et titre */
+.login-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo span {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #262626;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #8e8e8e;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Message d'erreur */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 1px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.error-message p {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+/* Formulaire */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Inputs - dimensions fixes comme Instagram */
+.form-input {
+  width: 268px;
+  height: 38px;
+  padding: 0 8px;
+  background: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  color: #262626;
+  outline: none;
+  transition: border-color 0.2s;
+  margin: 0 auto;
+  display: block;
+}
+
+.form-input::placeholder {
+  color: #8e8e8e;
+}
+
+.form-input:focus {
+  border-color: #a8a8a8;
+  background: white;
+}
+
+.form-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Bouton de soumission */
+.submit-button {
+  width: 268px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0.75rem auto 0;
+  display: block;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Séparateur */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.25rem 0;
+  gap: 1rem;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #dbdbdb;
+}
+
+.divider-text {
+  color: #8e8e8e;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* Mot de passe oublié */
+.forgot-password {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+.forgot-password a {
+  color: #00376b;
+  font-size: 0.75rem;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* Carte d'inscription */
+.signup-box {
+  background: white;
+  border: 1px solid #dbdbdb;
+  border-radius: 1px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.signup-box p {
+  color: #262626;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.signup-box a {
+  color: #0095f6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-box a:hover {
+  text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.footer a {
+  color: white;
+  font-size: 0.875rem;
+  text-decoration: none;
+  font-weight: 300;
+  transition: opacity 0.2s;
+}
+
+.footer a:hover {
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-box {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
+  .form-input,
+  .submit-button {
+    width: 100%;
+    max-width: 268px;
+  }
+}
