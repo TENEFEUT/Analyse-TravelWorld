@@ -1,83 +1,94 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import "./navbar.css";
 
 export default function Navbar() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    router.push("/auth/login");
+  }
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="container-custom">
-        <div className="flex justify-between items-center h-16">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-content">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-400 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">TW</span>
+          <Link href="/" className="navbar-logo">
+            <div className="logo-icon">
+              <span className="logo-text">TW</span>
             </div>
-            <span className="font-bold text-xl text-gray-900 hidden sm:block">
-              TravelWorld
-            </span>
+            <span className="logo-name">TravelWorld</span>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
-            <Link 
-              href="/dashboard" 
-              className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >
+          <div className="desktop-menu">
+            <Link href="/dashboard" className="nav-link">
               Dashboard
             </Link>
-            <Link 
-              href="/chatbot" 
-              className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >
+            <Link href="/chatbot" className="nav-link">
               Chatbot IA
             </Link>
             
             {/* Dropdown Pays */}
-            <div className="relative group">
-              <button className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+            <div className="nav-dropdown">
+              <button className="nav-link dropdown-trigger">
                 Destinations ▾
               </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <Link href="/pays/canada" className="block px-4 py-2 hover:bg-blue-50 rounded-t-lg">
+              <div className="dropdown-menu">
+                <Link href="/pays/canada" className="dropdown-item">
                   🇨🇦 Canada
                 </Link>
-                <Link href="/pays/france" className="block px-4 py-2 hover:bg-blue-50">
+                <Link href="/pays/france" className="dropdown-item">
                   🇫🇷 France
                 </Link>
-                <Link href="/pays/usa" className="block px-4 py-2 hover:bg-blue-50">
+                <Link href="/pays/usa" className="dropdown-item">
                   🇺🇸 USA
                 </Link>
-                <Link href="/pays/uk" className="block px-4 py-2 hover:bg-blue-50">
+                <Link href="/pays/uk" className="dropdown-item">
                   🇬🇧 Royaume-Uni
                 </Link>
-                <Link href="/pays/allemagne" className="block px-4 py-2 hover:bg-blue-50 rounded-b-lg">
+                <Link href="/pays/allemagne" className="dropdown-item">
                   🇩🇪 Allemagne
                 </Link>
               </div>
             </div>
 
-            <Link 
-              href="/profil" 
-              className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-            >
+            <Link href="/profil" className="nav-link">
               Profil
             </Link>
             
-            <Link href="/auth/login" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-lg transition-all text-sm">
-              Connexion
-            </Link>
+            {isAuthenticated ? (
+              <button onClick={handleLogout} className="nav-button logout">
+                Déconnexion
+              </button>
+            ) : (
+              <Link href="/auth/login" className="nav-button primary">
+                Connexion
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="mobile-menu-button"
+            aria-label="Menu"
           >
             <svg
-              className="w-6 h-6"
+              className="menu-icon"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -103,53 +114,85 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-100">
+          <div className="mobile-menu">
             <Link 
               href="/dashboard" 
-              className="block py-2 text-gray-700 hover:text-blue-600"
+              className="mobile-link"
               onClick={() => setMobileMenuOpen(false)}
             >
               Dashboard
             </Link>
             <Link 
               href="/chatbot" 
-              className="block py-2 text-gray-700 hover:text-blue-600"
+              className="mobile-link"
               onClick={() => setMobileMenuOpen(false)}
             >
               Chatbot IA
             </Link>
-            <div className="py-2">
-              <p className="font-semibold text-gray-900 mb-2">Destinations</p>
-              <Link href="/pays/canada" className="block pl-4 py-1 text-gray-600 hover:text-blue-600">
+            <div className="mobile-dropdown">
+              <p className="mobile-dropdown-title">Destinations</p>
+              <Link 
+                href="/pays/canada" 
+                className="mobile-dropdown-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🇨🇦 Canada
               </Link>
-              <Link href="/pays/france" className="block pl-4 py-1 text-gray-600 hover:text-blue-600">
+              <Link 
+                href="/pays/france" 
+                className="mobile-dropdown-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🇫🇷 France
               </Link>
-              <Link href="/pays/usa" className="block pl-4 py-1 text-gray-600 hover:text-blue-600">
+              <Link 
+                href="/pays/usa" 
+                className="mobile-dropdown-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🇺🇸 USA
               </Link>
-              <Link href="/pays/uk" className="block pl-4 py-1 text-gray-600 hover:text-blue-600">
+              <Link 
+                href="/pays/uk" 
+                className="mobile-dropdown-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🇬🇧 Royaume-Uni
               </Link>
-              <Link href="/pays/allemagne" className="block pl-4 py-1 text-gray-600 hover:text-blue-600">
+              <Link 
+                href="/pays/allemagne" 
+                className="mobile-dropdown-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 🇩🇪 Allemagne
               </Link>
             </div>
             <Link 
               href="/profil" 
-              className="block py-2 text-gray-700 hover:text-blue-600"
+              className="mobile-link"
               onClick={() => setMobileMenuOpen(false)}
             >
               Profil
             </Link>
-            <Link 
-              href="/auth/login" 
-              className="block mt-4 text-center btn-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Connexion
-            </Link>
+            {isAuthenticated ? (
+              <button 
+                onClick={() => {
+                  handleLogout();
+                  setMobileMenuOpen(false);
+                }}
+                className="mobile-button logout"
+              >
+                Déconnexion
+              </button>
+            ) : (
+              <Link 
+                href="/auth/login" 
+                className="mobile-button primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Connexion
+              </Link>
+            )}
           </div>
         )}
       </div>
